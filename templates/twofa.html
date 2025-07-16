@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Kod Doğrulama{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">2 Adımlı Giriş Doğrulama</h2>
+    <form method="POST">
+        <!-- CSRF token burada -->
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="mb-3">
+            <label for="code" class="form-label">E-posta ile gönderilen 6 haneli kod:</label>
+            <input type="text" class="form-control" id="code" name="code" required>
+        </div>
+        <button type="submit" class="btn btn-success w-100">Doğrula</button>
+    </form>
+</div>
+{% endblock %}

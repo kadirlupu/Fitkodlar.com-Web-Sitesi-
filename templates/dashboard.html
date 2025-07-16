@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - FitBlog{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-end">
+        <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm">Çıkış Yap</a>
+    </div>
+    <h1 class="text-center">Merhaba, {{ user }}!</h1>
+    <p class="text-center">FitBlog’a hoş geldiniz.</p>
+    <div class="text-center">
+        <a href="{{ url_for('home') }}" class="btn btn-primary">Anasayfaya Dön</a>
+    </div>
+</div>
+{% endblock %}

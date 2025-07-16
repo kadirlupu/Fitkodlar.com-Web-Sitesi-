@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category.name }} Kategorisindeki Gönderiler{% endblock %}
+
+{% block content %}
+<h2>{{ category.name }} Kategorisindeki Gönderiler</h2>
+
+<!-- Kategori Sekmeleri -->
+<nav class="mb-4">
+  <ul class="nav nav-pills">
+    <li class="nav-item">
+      <a href="{{ url_for('posts') }}" class="nav-link {% if not category %}active{% endif %}">Tüm Gönderiler</a>
+    </li>
+    {% for cat in categories %}
+    <li class="nav-item">
+      <a href="{{ url_for('posts_by_category', category_id=cat.id) }}" 
+         class="nav-link {% if cat.id == category.id %}active{% endif %}">
+        {{ cat.name }}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</nav>
+
+{% if posts %}
+  {% for post in posts %}
+    <div class="card mb-3">
+      {% if post.image_path %}
+      <img src="{{ url_for('static', filename='uploads/' ~ post.image_path) }}" class="card-img-top" alt="Gönderi Görseli">
+      {% endif %}
+      <div class="card-body">
+        <h4 class="card-title">{{ post.title }}</h4>
+        <p class="card-text">{{ post.content[:150] }}...</p>
+        <small>Yazar: {{ post.author.username }} | Tarih: {{ post.created_at.strftime('%Y-%m-%d') }}</small>
+        <div class="mt-3 d-flex justify-content-between align-items-center">
+          <a href="{{ url_for('post_detail', post_id=post.id) }}" class="btn btn-sm btn-outline-primary">Detayları Gör</a>
+          <span class="text-muted small">{{ post.comments|length }} yorum</span>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <p>Bu kategoriye ait gönderi bulunamadı.</p>
+{% endif %}
+{% endblock %}

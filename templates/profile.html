@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Profil - Fitkodlar{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2>Profil Sayfası</h2>
+    <p><strong>Kullanıcı Adı:</strong> {{ user.username }}</p>
+    {% if user.email %}
+        <p><strong>Email:</strong> {{ user.email }}</p>
+    {% endif %}
+    <p><strong>Admin mi?</strong> {{ "Evet" if user.is_admin else "Hayır" }}</p>
+    <p><strong>Katılım Tarihi:</strong> {{ user.created_at.strftime('%d.%m.%Y %H:%M') }}</p>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mt-3">Geri Dön</a>
+    <a href="{{ url_for('edit_profile') }}" class="btn btn-warning mt-3">Profilimi Düzenle</a>
+
+</div>
+{% endblock %}

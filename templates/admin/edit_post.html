@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Gönderiyi Düzenle{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Gönderiyi Düzenle</h2>
+
+    <!-- Flash mesajlar -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" enctype="multipart/form-data">
+        <!-- CSRF token -->
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="mb-3">
+            <label for="title" class="form-label">Başlık</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ post.title }}" required maxlength="150">
+        </div>
+
+        <div class="mb-3">
+            <label for="category" class="form-label">Kategori</label>
+            <select name="category_id" id="category" class="form-control mb-3" required>
+                <option value="" disabled>Seçiniz</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if post.category and post.category.id == category.id %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="content" class="form-label">İçerik</label>
+            <textarea class="form-control" id="content" name="content" rows="6" required>{{ post.content }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="image" class="form-label">Görsel Yükle (İstersen değiştir)</label>
+            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+            {% if post.image_path %}
+            <small>Mevcut görsel: <br>
+                <img src="{{ url_for('static', filename='uploads/' + post.image_path) }}" alt="Mevcut Görsel" style="max-width: 200px; margin-top: 10px;">
+            </small>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Güncelle</button>
+        <a href="{{ url_for('admin_posts') }}" class="btn btn-secondary ms-2">Geri Dön</a>
+    </form>
+
+    <div class="mt-4">
+        {% if post.author %}
+            <p><strong>Yazar:</strong> {{ post.author.username }}</p>
+        {% else %}
+            <p><strong>Yazar:</strong> Bilinmiyor</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

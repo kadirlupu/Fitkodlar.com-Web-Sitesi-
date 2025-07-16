@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Blog Gönderileri - Admin{% endblock %}
+
+{% block content %}
+<h2>Blog Gönderileri</h2>
+
+<div class="mb-3">
+    <a href="{{ url_for('new_post') }}" class="btn btn-primary">Yeni Gönderi Ekle</a>
+    <a href="{{ url_for('add_category') }}" class="btn btn-info">Kategori Ekle</a>
+</div>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Başlık</th>
+            <th>Kategori</th>
+            <th>Yazar</th>
+            <th>Görsel</th>
+            <th>Oluşturulma</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for post in posts %}
+        <tr>
+            <td>{{ post.id }}</td>
+            <td>{{ post.title }}</td>
+            <td>
+                {% if post.category %}
+                    <a href="{{ url_for('posts_by_category', category_id=post.category.id) }}" class="text-decoration-none">
+                        {{ post.category.name }}
+                    </a>
+                {% else %}
+                    <span class="text-muted">Kategori yok</span>
+                {% endif %}
+            </td>
+            <td>{{ post.author.username }}</td>
+            <td>
+                {% if post.image_path %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ post.image_path) }}"
+                         alt="Gönderi Görseli" width="80" height="60" style="object-fit:cover;">
+                {% else %}
+                    <span class="text-muted">Yok</span>
+                {% endif %}
+            </td>
+            <td>{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>
+                <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-sm btn-warning">Düzenle</a>
+                <a href="{{ url_for('delete_post', post_id=post.id) }}" class="btn btn-sm btn-danger"
+                   onclick="return confirm('Bu gönderiyi silmek istediğinizden emin misiniz?')">Sil</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

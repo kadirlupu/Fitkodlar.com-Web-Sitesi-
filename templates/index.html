@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}FitKodlar - Anasayfa{% endblock %}
+
+{% block body_class %}bg-light{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h1>FitKodlar.com</h1>
+    <p>Bilimsel içerikler, fitness tüyoları ve daha fazlası!</p>
+    <div class="mt-4">
+        <a href="{{ url_for('login') }}" class="btn btn-success me-2">Giriş Yap</a>
+        <a href="{{ url_for('register') }}" class="btn btn-outline-primary">Kayıt Ol</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Yeni Gönderi Ekle - Admin{% endblock %}
+
+{% block content %}
+<h2>Yeni Gönderi Ekle</h2>
+
+<!-- Flash mesajlar (varsa göster) -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<form method="POST" enctype="multipart/form-data">
+    <!-- CSRF token ekle -->
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <label for="category">Kategori</label>
+    <select name="category_id" id="category" class="form-control mb-3" required>
+        <option value="" disabled selected>Kategori Seçin</option>
+        {% for category in categories %}
+        <option value="{{ category.id }}">{{ category.name }}</option>
+        {% endfor %}
+    </select>
+
+    <div class="mb-3">
+        <label for="title" class="form-label">Başlık</label>
+        <input type="text" class="form-control" id="title" name="title" required maxlength="150">
+    </div>
+
+    <div class="mb-3">
+        <label for="content" class="form-label">İçerik</label>
+        <textarea class="form-control" id="content" name="content" rows="8" required></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label for="image" class="form-label">Gönderi Görseli</label>
+        <input class="form-control" type="file" name="image" id="image" accept="image/*">
+    </div>
+
+    <button type="submit" class="btn btn-success">Gönderi Oluştur</button>
+    <a href="{{ url_for('admin_posts') }}" class="btn btn-secondary ms-2">İptal</a>
+</form>
+{% endblock %}

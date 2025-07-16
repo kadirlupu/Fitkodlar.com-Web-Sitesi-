@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Kategori Düzenle - Admin{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Kategori Düzenle</h2>
+
+  <form method="POST">
+    <!-- 🔒 CSRF Token eklendi -->
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="mb-3">
+      <label for="name" class="form-label">Kategori Adı</label>
+      <input type="text" class="form-control" id="name" name="name" value="{{ category.name }}" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Güncelle</button>
+    <a href="{{ url_for('add_category') }}" class="btn btn-secondary">İptal</a>
+  </form>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show mt-3" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+{% endblock %}

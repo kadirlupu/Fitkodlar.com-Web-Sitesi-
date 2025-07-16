@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} - FitKodlar{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <article class="shadow p-4 rounded bg-white">
+    
+    <!-- Başlık -->
+    <h1 class="mb-3 fw-bold text-center">{{ post.title }}</h1>
+
+    <!-- Meta Bilgiler -->
+    <div class="d-flex flex-wrap justify-content-center text-muted small mb-4 gap-3">
+      <span><i class="bi bi-person"></i> {{ post.author.username }}</span>
+      <span><i class="bi bi-folder"></i>
+        {% if post.category %}
+          <a href="{{ url_for('posts_by_category', category_id=post.category.id) }}">{{ post.category.name }}</a>
+        {% else %}
+          Kategori yok
+        {% endif %}
+      </span>
+      <span><i class="bi bi-calendar-event"></i> {{ post.created_at.strftime('%d %B %Y, %H:%M') }}</span>
+    </div>
+
+    <!-- Görsel -->
+    {% if post.image_path %}
+    <div class="text-center mb-4">
+      <div class="rounded overflow-hidden border" style="max-height: 400px;">
+        <img src="{{ url_for('static', filename='uploads/' ~ post.image_path) }}" 
+             alt="{{ post.title }}" 
+             class="img-fluid w-100"
+             style="object-fit: cover; max-height: 400px;">
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- İçerik -->
+    <div class="post-content fs-5" style="line-height: 1.8; color: #333;">
+      {{ post.content | safe }}
+    </div>
+
+    <!-- Önceki / Sonraki -->
+    <nav class="mt-5 d-flex justify-content-between">
+      {% if prev_post %}
+        <a href="{{ url_for('post_detail', post_id=prev_post.id) }}" class="btn btn-outline-primary">&laquo; Önceki</a>
+      {% else %}
+        <div></div>
+      {% endif %}
+      {% if next_post %}
+        <a href="{{ url_for('post_detail', post_id=next_post.id) }}" class="btn btn-outline-primary">Sonraki &raquo;</a>
+      {% else %}
+        <div></div>
+      {% endif %}
+    </nav>
+  </article>
+
+  <hr class="my-4">
+  <h4 class="mb-3">Yorumlar</h4>
+
+  <!-- Yorumlar Listesi -->
+  <div class="mb-4">
+    {% for comment in post.comments %}
+      <div class="border rounded p-3 mb-3">
+        <strong>{{ comment.user.username }}</strong> 
+        <small class="text-muted">{{ comment.created_at.strftime('%d %B %Y %H:%M') }}</small>
+        <p class="mb-0">{{ comment.content }}</p>
+      </div>
+    {% else %}
+      <p>Henüz yorum yapılmamış.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Yorum Ekleme Formu -->
+{% if session.get("user_id") %}
+  <form method="POST" action="{{ url_for('add_comment', post_id=post.id) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="mb-3">
+      <label for="comment" class="form-label">Yorumunuz</label>
+      <textarea class="form-control" name="comment" id="comment" rows="3" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Gönder</button>
+  </form>
+{% else %}
+  <p><a href="{{ url_for('login') }}">Giriş yaparak</a> yorum yapabilirsiniz.</p>
+{% endif %}
+</div>
+{% endblock %}

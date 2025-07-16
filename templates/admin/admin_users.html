@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Kullanıcı Yönetimi - Admin{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Kullanıcılar</h2>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% if users %}
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Kullanıcı Adı</th>
+          <th>E-posta</th>
+          <th>Yetki</th>
+          <th>İşlem</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            {% if user.is_admin %}
+              <span class="badge bg-success">Admin</span>
+            {% else %}
+              <span class="badge bg-secondary">Kullanıcı</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if user.username != session["username"] %}
+              <a href="{{ url_for('toggle_admin', user_id=user.id) }}" class="btn btn-sm btn-warning">Yetki Değiştir</a>
+              <a href="{{ url_for('delete_user', user_id=user.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?')">Sil</a>
+            {% else %}
+              <span class="text-muted">Kendi hesabınız</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Hiç kullanıcı bulunamadı.</p>
+  {% endif %}
+</div>
+{% endblock %}

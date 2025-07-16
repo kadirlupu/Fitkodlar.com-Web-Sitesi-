@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Giriş Yap - FitKodlar{% endblock %}
+{% block body_class %}bg-light{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Giriş Yap</h2>
+
+    <!-- Flash mesajlar -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- Giriş Formu -->
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="mb-3">
+            <label for="email" class="form-label">E-posta</label>
+            <input type="email" class="form-control" name="email" id="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Şifre</label>
+            <input type="password" class="form-control" name="password" id="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
+    </form>
+
+    <div class="text-center mt-3">
+        <a href="{{ url_for('forgot_password') }}">Şifremi unuttum</a>
+    </div>
+    <p class="mt-3 text-center">Hesabınız yok mu? <a href="{{ url_for('register') }}">Kayıt olun</a></p>
+</div>
+{% endblock %}

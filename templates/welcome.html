@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Hoş Geldiniz{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h1>Hoş Geldiniz, {{ username }}!</h1>
+    <p>FitKodlar.com'a giriş yaptınız. Buradan paylaşımları görüntüleyebilir ya da profilinizi düzenleyebilirsiniz.</p>
+    <a href="{{ url_for('posts') }}" class="btn btn-primary mt-3">Gönderilere Git</a>
+</div>
+{% endblock %}
