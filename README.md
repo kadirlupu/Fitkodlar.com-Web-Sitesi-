@@ -63,6 +63,7 @@ Terminalde şu bağlantıyı göreceksiniz:
 arduino
 http://localhost:5000
 Bu bağlantıyı tarayıcıda açarak sistemi test edebilirsiniz.
+venv de kurulması gerekiyor
 
 👨‍💻 Geliştirici
 Ad: Kadir LUPU
